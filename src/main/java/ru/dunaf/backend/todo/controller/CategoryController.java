@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dunaf.backend.todo.entity.Category;
+import ru.dunaf.backend.todo.search.CategorySearchValues;
 import ru.dunaf.backend.todo.service.CategoryService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/category")
@@ -79,6 +81,40 @@ public class CategoryController {
         }
 
         return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 без объектов (операция прошла успешно)
+    }
+
+    // поиск по любым параметрам CategorySearchValues
+    @PostMapping("/search")
+    public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues) {
+
+        // проверка на обязательные параметры
+        if (categorySearchValues.getEmail() == null || categorySearchValues.getEmail().trim().length() == 0) {
+            return new ResponseEntity("missed param: email", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        // поиск категорий пользователя по названию
+        List<Category> list = service.findByTitle(categorySearchValues.getTitle(), categorySearchValues.getEmail());
+
+        return ResponseEntity.ok(list);
+    }
+
+
+    // параметр id передаются не в BODY запроса, а в самом URL
+    @PostMapping("/id")
+    public ResponseEntity<Category> findById(@RequestBody Long id) {
+
+        Category category = null;
+
+        // можно обойтись и без try-catch, тогда будет возвращаться полная ошибка (stacktrace)
+        // здесь показан пример, как можно обрабатывать исключение и отправлять свой текст/статус
+        try {
+            category = service.findById(id);
+        } catch (NoSuchElementException e) { // если объект не будет найден
+            e.printStackTrace();
+            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return ResponseEntity.ok(category);
     }
 
 
