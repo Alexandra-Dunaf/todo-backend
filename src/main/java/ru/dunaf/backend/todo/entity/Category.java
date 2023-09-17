@@ -27,9 +27,9 @@ public class Category {
     @Column(updatable = false)
     private Long uncompletedCount;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable=false, updatable=false)
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable=false, updatable=false)
+    private User user;
 
     @Override
     public String toString() {

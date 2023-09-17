@@ -21,9 +21,9 @@ public class Priority {
     @EqualsAndHashCode.Include
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Override
     public String toString() {

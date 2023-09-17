@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,25 +28,8 @@ public class User {
     @Column(name = "userpassword")
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
-
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<Category> categories;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<Priority> priorities;
-//
-//    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, optional = false)
-//    private Activity activity; // активность пользователя (активация и любые другие)
-//
-//    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, optional = false)
-//    private Stat stat; // общая статистика пользователя по всем задачам
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<Task> tasks;
-
-
+//    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+//    private Set<Role> roles = new HashSet<>();
 
     @Override
     public String toString() {
