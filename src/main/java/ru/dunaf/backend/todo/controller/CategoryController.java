@@ -1,5 +1,6 @@
 package ru.dunaf.backend.todo.controller;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,23 @@ public class CategoryController {
         service.update(category);
 
         return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
+    }
+
+    // для удаления используем тип запроса DELETE и передаем ID для удаления
+    // можно также использовать метод POST и передавать ID в теле запроса
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+
+        // можно обойтись и без try-catch, тогда будет возвращаться полная ошибка (stacktrace)
+        // здесь показан пример, как можно обрабатывать исключение и отправлять свой текст/статус
+        try {
+            service.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            e.printStackTrace();
+            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 без объектов (операция прошла успешно)
     }
 
 
